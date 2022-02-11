@@ -1,0 +1,28 @@
+MOV 00 <src1> <ignore> <dst> # dst = src1
+ADD 01 <src1> <src2> <dst> # dst = src1 + src2
+SUB 02 <src1> <src2> <dst> # dst = src1 - src2
+IMUL 03 <src1> <src2> <dst> # dst = src1 * src2
+DIV 04 <src1> <src2> <dst> # dst = src1 / src2
+
+MUL 13 <src1> <src2> <dst> # dst = |src1 * src2|
+MOD 14 <src1> <src2> <dst> # dst = src1 mod src2
+
+INP 20 <dst> <ignore> <ignore> # input uchar to dst
+OUT 21 <src> <ignore> <ignore> # output uchar from src
+
+JMP 80 <src1> <ignore> <ignore> # jump to src1
+JEQ 81 <src1> <src2> <dst> # if src1 == src2 -> JMP dst
+
+JILE 83 <src1> <src2> <dst> # if src1 < src2 -> JMP dst
+JIGRQ 84 <src1> <src2> <dst> # if src1 >= src2 -> JMP dst
+JIGR 85 <src1> <src2> <dst> # if src1 > src2 -> JMP dst
+JILEQ 86 <src1> <src2> <dst> # if src1 <= src2 -> JMP dst
+
+JLE 93 <src1> <src2> <dst> # if |src1| < |src2| -> JMP dst
+JGRQ 94 <src1> <src2> <dst> # if |src1| >= |src2| -> JMP dst
+JGR 95 <src1> <src2> <dst> # if |src1| > |src2| -> JMP dst
+JLEQ 96 <src1> <src2> <dst> # if |src1| <= |src2| -> JMP dst
+
+EXIT 99 <ignore> <ignore> <ignore> # exit the program
+
+
