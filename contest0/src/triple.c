@@ -8,20 +8,6 @@ D: Троичная система счисления
 
 #include <stdio.h>
 
-char translate_char(char ch) {
-    if (ch > 'A') return ch - 'A' + 10;
-    else if (ch > '0') return ch - '0';
-    else return ch;
-}
-
-from_base(int *s, char base) {
-    unsigned long long Y = 0;
-    unsigned long long power = 1;
-    for (; s != '\0'; s++, power *= base) Y += power * translate_char(s[0]);
-    return Y;
-}
-
-
 int main() {
 
     unsigned long long X = 0;
