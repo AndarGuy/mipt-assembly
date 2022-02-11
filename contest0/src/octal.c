@@ -16,10 +16,10 @@ int main() {
     int data_length = read(fdin, input, 1024);
     input[data_length] = 0;
 
-    int long long X;
+    unsigned long long X;
     sscanf(input, "%lld", &X);
 
-    char s[255];
+    char s[255] = {0};
     int number_length = 0;
 
     for (int i = 0; X > 0; i++, number_length = i) {
