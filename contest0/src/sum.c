@@ -9,12 +9,15 @@
 #include <stdio.h>
 
 char translate_char(char ch) {
-    if (ch > 'A') 
+    if (ch >= 'a' && ch <= 'z') {
+        return ch - 'a' + 10;
+    } else if (ch >= 'A' && ch <= 'Z') {
         return ch - 'A' + 10;
-    else if (ch > '0') 
+    } else if (ch >= '0' && ch <= '9') {
         return ch - '0';
-    else 
-        return 0;
+    }
+    
+    return 0;
 }
 
 int len(char *s) {
@@ -23,23 +26,28 @@ int len(char *s) {
     return counter;
 }
 
-unsigned long long from_base(char *s, char base) {
-    unsigned long long Y = 0;
-    unsigned long long power = 1;
+long long from_base(char *s, char base) {
+    char is_minus = 0;
+    if (s[0] == '-') {
+        is_minus = 1;
+        s++;
+    }
+    long long Y = 0;
+    long long power = 1;
     int slen = len(s);
     for (int i = 0; i < slen; i++, power *= base) {
         // printf("%lld %lld %d\n", power, Y, translate_char(s[0]));
         Y += power * translate_char(s[slen - i - 1]);
     }
-    return Y;
+    return is_minus ? -Y : Y;
 }
 
 int main(int argc, char *argv[]) {
     if (argc < 2) 
         return 1;
-    double x;
-    scanf("%lf", &x);
-    unsigned long long y, z;
+    float x;
+    scanf("%f", &x);
+    long long y, z;
     // printf("%s\n", argv[0]);
     z = from_base(argv[1], 27);
     // printf("%lld\n", z);
@@ -48,7 +56,7 @@ int main(int argc, char *argv[]) {
     y = from_base(z_string, 16);
     // printf("%lld\n", y);
 
-    printf("%0.3lf\n", x + y + z);
+    printf("%lf\n", x + y + z);
 
     return 0;
 }

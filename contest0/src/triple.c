@@ -8,30 +8,45 @@ D: Троичная система счисления
 
 #include <stdio.h>
 
+char translate_char(char ch) {
+    if (ch >= 'A') 
+        return ch - 'A' + 10;
+    else if (ch >= '0') 
+        return ch - '0';
+    else 
+        return 0;
+}
+
+int len(char *s) {
+    int counter;
+    for (counter = 0; s[0] != 0; s++, counter++);
+    return counter;
+}
+
+long long from_base(char *s, char base) {
+    char is_minus = 0;
+    if (s[0] == '-') {
+        is_minus = 1;
+        s++;
+    }
+    long long Y = 0;
+    long long power = 1;
+    int slen = len(s);
+    for (int i = 0; i < slen; i++, power *= base) {
+        // printf("%lld %lld %d\n", power, Y, translate_char(s[0]));
+        Y += power * translate_char(s[slen - i - 1]);
+    }
+    return is_minus ? -Y : Y;
+}
+
 int main() {
 
-    unsigned long long X = 0;
-    scanf("%lld", &X);
+    char s[255];
+    scanf("%s", s);
 
-    char s[255] = {'0'};
-    int number_length = 1;
-    int power_of_three = 1;
+    long long Y = from_base(s, 3);
 
-    unsigned long long Y = 0;
-
-    for (int i = 0; X > 0; i++, power_of_three *= 3) {
-        Y += power_of_three * (X % 10);
-        X /= 10;
-    }
-
-    for (int i = 0; Y > 0; i++, number_length = i) {
-        s[i] = '0' + (Y % 10);
-        Y /= 10;
-    }
-
-    for (int i = 0; i < number_length; i++) {
-        printf("%c", s[number_length - i - 1]);
-    }
+    printf("%lld", Y);
 
     return 0;
 
