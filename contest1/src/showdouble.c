@@ -50,7 +50,8 @@ int main() {
 
         for (int i = 0; i < size; i++) {
             char n = data.bytes[size - i - 1];
-            if (i < 6) n = 0;
+            if (i < 6) 
+                n = 0;
             printf(BYTE_TO_BINARY_PATTERN, BYTE_TO_BINARY(n));
             printf(" ");
         }
