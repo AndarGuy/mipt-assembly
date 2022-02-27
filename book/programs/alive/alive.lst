@@ -1,0 +1,39 @@
+     1                                  ; alive.asm
+     2                                  
+     3                                  section .data
+     4 00000000 48656C6C6F2C20576F-         message1            db      "Hello, World!", 10, 0          ; string
+     4 00000009 726C64210A00       
+     5                                      message1_length     equ     $ - message1 - 1                ; measure the length, minus the 0
+     6 0000000F 416C69766520616E64-         message2            db      "Alive and Kicking!", 10, 0     ; string
+     6 00000018 204B69636B696E6721-
+     6 00000021 0A00               
+     7                                      message2_length     equ     $ - message2 - 1                ; measure the length, minus the 0
+     8 00000023 6501000000000000            radius              dq      357                             ; no string, not displayable?
+     9 0000002B 1F85EB51B81E0940            pi                  dq      3.14                            ; no string, not displayable?
+    10                                  
+    11                                  section .bss
+    12                                  
+    13                                  section .text
+    14                                      global _main
+    15                                  
+    16                                  _main:
+    17 00000000 B804000002                  mov     rax, 0x2000000 + 4      ; 4 = write
+    18 00000005 BF01000000                  mov     rdi, 1                  ; 1 = stdout
+    19 0000000A 48BE-                       mov     rsi, message1           ; string to display
+    19 0000000C [0000000000000000] 
+    20 00000014 BA0E000000                  mov     rdx, message1_length    ; length of the string
+    21 00000019 0F05                        syscall                         ; display the string
+    22                                  
+    23 0000001B B804000002                  mov     rax, 0x2000000 + 4      ; 4 = write
+    24 00000020 BF01000000                  mov     rdi, 1                  ; 1 = stdout
+    25 00000025 48BE-                       mov     rsi, message2           ; string to display
+    25 00000027 [0F00000000000000] 
+    26 0000002F BA13000000                  mov     rdx, message2_length    ; length of the string
+    27 00000034 0F05                        syscall                         ; display the string
+    28                                  
+    29 00000036 B801000002                  mov     rax, 0x2000000 + 1      ; 1 = exit
+    30 0000003B BF00000000                  mov     rdi, 0                  ; 0 = success exit code
+    31 00000040 0F05                        syscall                         ; quit
+    32                                  
+    33                                      
+    34                                  

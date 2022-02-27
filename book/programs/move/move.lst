@@ -1,0 +1,43 @@
+     1                                  ; move.asm
+     2                                  
+     3                                  default rel
+     4                                  
+     5                                  global _main
+     6                                  
+     7                                  section .data
+     8 00000000 7B                          byte_number     db      123
+     9 00000001 3930                        word_number     dw      12345
+    10 00000003 D2029649                    dword_number    dd      1234567890
+    11 00000007 1581E97DF4102211            qword_number1   dq      1234567890123456789
+    12 0000000F 40E2010000000000            qword_number2   dq      123456
+    13 00000017 1F85EB51B81E0940            qword_number3   dq      3.14
+    14                                  
+    15                                  section .bss
+    16                                  
+    17                                  section .text
+    18                                  _main:
+    19 00000000 55                          push        rbp
+    20 00000001 4889E5                      mov         rbp, rsp
+    21                                  
+    22 00000004 48C7C0FFFFFFFF              mov         rax, -1                     ; fill rax with 1s
+    23 0000000B 8A05(00000000)              mov         al, byte [byte_number]      ; does NOT clear upper bits of rax
+    24 00000011 4831C0                      xor         rax, rax                    ; clear rax
+    25 00000014 8A05(00000000)              mov         al, byte [byte_number]      ; now rax has the correct value
+    26                                  
+    27 0000001A 48C7C0FFFFFFFF              mov         rax, -1                     ; fill rax with 1s
+    28 00000021 668B05(01000000)            mov         ax, word [word_number]      ; does NOT clear upper bits of rax
+    29 00000028 4831C0                      xor         rax,rax                     ; clear rax
+    30 0000002B 668B05(01000000)            mov         ax, word [word_number]      ; now rax has the correct value
+    31                                  
+    32 00000032 48C7C0FFFFFFFF              mov         rax, -1                     ; fill rax with 1s
+    33 00000039 8B05(03000000)              mov         eax, dword [dword_number]   ; does clear upper bits of rax
+    34                                  
+    35 0000003F 48C7C0FFFFFFFF              mov         rax, -1                     ; fill rax with 1s
+    36 00000046 488B05(07000000)            mov         rax, qword [qword_number1]  ; does clear upper bits of rax
+    37 0000004D 488905(0F000000)            mov         qword [qword_number2], rax  ; one operand always a register
+    38 00000054 B840E20100                  mov         rax, 123456                 ; source operand an immediate value
+    39 00000059 F30F7E05(17000000)          movq        xmm0, [qword_number3]       ; instruction for floating point
+    40                                  
+    41 00000061 4889EC                      mov         rsp,rbp
+    42 00000064 5D                          pop         rbp
+    43 00000065 C3                          ret

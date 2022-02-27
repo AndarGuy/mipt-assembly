@@ -1,0 +1,31 @@
+     1                                  ; hello4.asm
+     2                                  
+     3                                  global _main
+     4                                  
+     5                                  extern      _printf                                         ; declare the function as external
+     6                                  
+     7                                  section .data
+     8 00000000 48656C6C6F2C20576F-         message         db  "Hello, World!", 0
+     8 00000009 726C642100         
+     9 0000000E 54686973206973206F-         string_format   db  "This is out string: %s", 10, 0     ; print format
+     9 00000017 757420737472696E67-
+     9 00000020 3A2025730A00       
+    10                                  
+    11                                  section .bss
+    12                                  
+    13                                  section .text
+    14                                  _main:
+    15 00000000 55                          push            rbp
+    16 00000001 4889E5                      mov             rbp, rsp
+    17 00000004 48BF-                       mov             rdi, string_format      ; first argument for printf
+    17 00000006 [0E00000000000000] 
+    18 0000000E 48BE-                       mov             rsi, message            ; second argument for printf
+    18 00000010 [0000000000000000] 
+    19 00000018 B800000000                  mov             rax, 0                  ; no xmm registers involved
+    20 0000001D E8(00000000)                call            _printf                  ; call the function
+    21                                  
+    22 00000022 4889EC                      mov             rsp, rbp
+    23 00000025 5D                          pop             rbp
+    24 00000026 B801000002                  mov             rax, 0x2000000 + 1      ; 1 = exit
+    25 0000002B BF00000000                  mov             rdi, 0                  ; 0 = successful exit code
+    26 00000030 0F05                        syscall                                 ; exit
