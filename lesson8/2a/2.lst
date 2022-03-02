@@ -1,0 +1,42 @@
+     1                                  ; 1.asm
+     2                                  
+     3                                  ; Напишите программу на ассемблере, которая соответствует приведенному коду на С.
+     4                                  
+     5                                  ; int  x, y=25, t=19;
+     6                                  ; int *xp=&t;
+     7                                  ;            x = *xp;
+     8                                  ; *xp = y;
+     9                                  ; printf(“%d   %d\n”, x, *xp);
+    10                                  
+    11                                  global _main
+    12                                  
+    13                                  default rel
+    14                                  
+    15                                  extern _printf
+    16                                  
+    17                                  section .data
+    18 00000000 0C                      a               db      12
+    19 00000001 78000000                b               dd      120
+    20 00000005 25640A00                output_format   db      "%d", 0xA, 0x0
+    21                                  
+    22                                  section .text
+    23                                  
+    24                                  _main:
+    25 00000000 55                          push            rbp
+    26 00000001 4889E5                      mov             rbp, rsp
+    27                                  
+    28 00000004 488B05(00000000)            mov             rax, [a]
+    29 0000000B 8805(01000000)              mov             [b], al
+    30                                  
+    31                                      ; print
+    32 00000011 48BF-                       mov             rdi, output_format
+    32 00000013 [0500000000000000] 
+    33 0000001B 488B35(01000000)            mov             rsi, [b]
+    34 00000022 B800000000                  mov             rax, 0          ; no floating point
+    35 00000027 E8(00000000)                call            _printf         ; printf(“%d   %d\n”, x, *xp);
+    36                                  
+    37 0000002C 4889EC                      mov         rsp, rbp
+    38 0000002F 5D                          pop         rbp
+    39 00000030 C3                          ret
+    40                                  
+    41                                  

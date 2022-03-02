@@ -1,3 +1,5 @@
+# Flags
+
 | **Name**  | **Symbol** | **Bit** | **Content**                                                      |
 | --------- | ---------- | ------- | ---------------------------------------------------------------- |
 | Carry     | CF         | 0       | Previous instruction had a carry                                 |

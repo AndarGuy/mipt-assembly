@@ -1,0 +1,50 @@
+     1                                  ; 1.asm
+     2                                  
+     3                                  ; Напишите программу на ассемблере, которая соответствует приведенному коду на С.
+     4                                  
+     5                                  ; int  x, y=25, t=19;
+     6                                  ; int *xp=&t;
+     7                                  ;            x = *xp;
+     8                                  ; *xp = y;
+     9                                  ; printf(“%d   %d\n”, x, *xp);
+    10                                  
+    11                                  global _main
+    12                                  
+    13                                  default rel
+    14                                  
+    15                                  extern _printf
+    16                                  
+    17                                  section .data
+    18 00000000 19000000                y               dd      25
+    19 00000004 13000000                t               dd      19
+    20 00000008 25642025640A00          output_format   db      "%d %d", 0xA, 0
+    21                                  
+    22                                  section .bss
+    23 00000000 ????????                x       resd    1
+    24                                  
+    25                                  section .text
+    26                                  
+    27                                  _main:
+    28 00000000 55                          push            rbp
+    29 00000001 4889E5                      mov             rbp, rsp
+    30                                  
+    31 00000004 48B8-                       mov         rax, t              ; *xp=&t;
+    31 00000006 [0400000000000000] 
+    32 0000000E 8B38                        mov         edi, dword [rax]    
+    33 00000010 893D(00000000)              mov         [x], edi            ; x = *xp;
+    34 00000016 8B3D(00000000)              mov         edi, dword [y]      ; *xp = y;
+    35 0000001C 8938                        mov         [rax], edi
+    36                                  
+    37                                      ; print message1
+    38 0000001E 48BF-                       mov             rdi, output_format
+    38 00000020 [0800000000000000] 
+    39 00000028 8B10                        mov             edx, [rax]
+    40 0000002A 488B35(00000000)            mov             rsi, [x]
+    41 00000031 B800000000                  mov             rax, 0          ; no floating point
+    42 00000036 E8(00000000)                call            _printf         ; printf(“%d   %d\n”, x, *xp);
+    43                                  
+    44 0000003B 4889EC                      mov         rsp, rbp
+    45 0000003E 5D                          pop         rbp
+    46 0000003F C3                          ret
+    47                                  
+    48                                  

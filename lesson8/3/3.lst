@@ -1,0 +1,51 @@
+     1                                  ; Реализовать присваивание b = a; (не более двух команд) при условии:
+     2                                  ; char a; short b
+     3                                  
+     4                                  global _main
+     5                                  
+     6                                  default rel
+     7                                  
+     8                                  extern _printf
+     9                                  
+    10                                  section .data
+    11 00000000 03000080                x               dd      -2147483645
+    12 00000004 F8FFFF7F                y               dd      2147483640
+    13 00000008 FDFFFFFF                z               dd      4294967293
+    14                                  
+    15 0000000C 78203D2025642C2079-     output_format   db      "x = %d, y = %d, z = %u", 0xA, 0x0
+    15 00000015 203D2025642C207A20-
+    15 0000001E 3D2025750A00       
+    16                                  
+    17                                  section .text
+    18                                  
+    19                                  _main:
+    20 00000000 55                          push    rbp                     ; save stack
+    21                                  
+    22 00000001 8A05(00000000)              mov al, byte [x]
+    23 00000007 FEC0                        inc al
+    24 00000009 8805(00000000)              mov byte [x], al
+    25                                  
+    26 0000000F 8A05(04000000)              mov al, byte [y]
+    27 00000015 FEC0                        inc al
+    28 00000017 8805(04000000)              mov byte [y], al
+    29                                  
+    30 0000001D 8A05(08000000)              mov al, byte [z]
+    31 00000023 FEC0                        inc al
+    32 00000025 8805(08000000)              mov byte [z], al
+    33                                  
+    34 0000002B 4831C0                      xor rax, rax
+    35                                  
+    36                                      ; print
+    37 0000002E 48BF-                       mov             rdi, output_format
+    37 00000030 [0C00000000000000] 
+    38 00000038 488B35(00000000)            mov             rsi, [x]
+    39 0000003F 488B15(04000000)            mov             rdx, [y]
+    40 00000046 488B0D(08000000)            mov             rcx, [z]
+    41 0000004D B800000000                  mov             rax, 0          ; no floating point
+    42 00000052 E8(00000000)                call            _printf         ; printf(“%d   %d\n”, x, *xp);
+    43                                    
+    44 00000057 5D                          pop	rbp                         ; restore stack
+    45 00000058 C3                          ret                             ; exit
+    46                                  
+    47                                  
+    48                                   

@@ -1,0 +1,61 @@
+     1                                  ; Реализовать присваивание b = a; (не более двух команд) при условии:
+     2                                  ; char a; short b
+     3                                  
+     4                                  global _main
+     5                                  
+     6                                  default rel
+     7                                  
+     8                                  extern _printf
+     9                                  
+    10                                  section .data
+    11 00000000 02                      x               db      2
+    12 00000001 07                      a               db      7
+    13                                  
+    14 00000002 D0A0D0B5D0B7D183D0-     output_format   db      "Результат %d, остаток %d", 0xA, 0x0
+    14 0000000B BBD18CD182D0B0D182-
+    14 00000014 2025642C20D0BED181-
+    14 0000001D D182D0B0D182D0BED0-
+    14 00000026 BA2025640A00       
+    15                                  
+    16                                  section .text
+    17                                  
+    18                                  _main:
+    19 00000000 55                          push    rbp                     ; save stack
+    20                                  
+    21 00000001 4831C0                      xor     rax, rax                ; clean rax
+    22 00000004 8A05(00000000)              mov     al, byte [x]            ; al = x
+    23 0000000A 66F7E8                      imul    ax                      ; ax = ax * ax
+    24 0000000D 66BB0A00                    mov     bx, 10                  ; bx = 10
+    25 00000011 66F7EB                      imul    bx                      ; ax = ax * bx
+    26 00000014 6683C005                    add     ax, 5                   ; ax = ax + 5
+    27 00000018 6689C3                      mov     bx, ax                  ; bx = ax
+    28 0000001B 66F7DB                      neg     bx                      ; bx = -bx
+    29 0000001E 66B80100                    mov     ax, 0x1                 ; ax = 1
+    30 00000022 4831C9                      xor     rcx, rcx                ; clean rcx
+    31 00000025 8A0D(00000000)              mov     cl, byte [x]            ; cl = x
+    32 0000002B 66F7E9                      imul    cx                      ; ax = ax * cx
+    33 0000002E 66F7E9                      imul    cx                      ; ax = ax * cx
+    34 00000031 66F7E9                      imul    cx                      ; ax = ax * cx
+    35 00000034 66F7D8                      neg     ax                      ; ax = -ax
+    36 00000037 6601C3                      add     bx, ax                  ; bx = bx + ax
+    37 0000003A 6689D8                      mov     ax, bx                  ; ax = bx
+    38 0000003D 4831DB                      xor     rbx, rbx                ; clean rbx
+    39 00000040 8A1D(01000000)              mov     bl, byte [a]            ; bl = a
+    40 00000046 F6FB                        idiv    bl                      ; ah = ax / bl, al = ax % bl
+    41                                  
+    42                                      ; print
+    43 00000048 48BF-                       mov             rdi, output_format
+    43 0000004A [0200000000000000] 
+    44 00000052 0FBEF0                      movsx           esi, al
+    45 00000055 0FBED4                      movsx           edx, ah
+    46 00000058 B800000000                  mov             rax, 0          ; no floating point
+    47 0000005D E8(00000000)                call            _printf         ; printf(“%d   %d\n”, x, *xp);
+    48                                    
+    49 00000062 5D                          pop	rbp                         ; restore stack
+    50                                      
+    51 00000063 B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    52 00000068 BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    53 0000006D 0F05                        syscall                         ; quit
+    54                                  
+    55                                  
+    56                                   
