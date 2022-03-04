@@ -1,0 +1,45 @@
+     1                                  ; Умножить слово на байт
+     2                                  
+     3                                  global _main
+     4                                  
+     5                                  default rel
+     6                                  
+     7                                  extern _printf
+     8                                  
+     9                                  section .data
+    10 00000000 726573756C74203D20-     output_format   db      "result = %u", 0xA, 0x0
+    10 00000009 25750A00           
+    11 0000000D E803                    a               dw      1000
+    12 0000000F 32                      b               db      50
+    13                                  
+    14                                  section .text
+    15                                  
+    16                                  _main:
+    17 00000000 55                          push    rbp                     ; save stack
+    18                                  
+    19 00000001 668B0D(0D000000)            mov     cx, word [a]
+    20 00000008 660FB61D(0F000000)          movzx   bx, byte [b]
+    21 00000010 660FB6C1                    movzx   ax, cl
+    22 00000014 F6E3                        mul     bl
+    23 00000016 6689C2                      mov     dx, ax
+    24 00000019 660FB6C5                    movzx   ax, ch
+    25 0000001D F6E3                        mul     bl
+    26 0000001F 00C6                        add     dh, al
+    27 00000021 0FB7D2                      movzx   edx, dx
+    28                                  
+    29                                  
+    30                                      ; print
+    31 00000024 48BF-                       mov             rdi, output_format
+    31 00000026 [0000000000000000] 
+    32 0000002E 89D6                        mov             esi, edx
+    33 00000030 B800000000                  mov             rax, 0          ; no floating point
+    34 00000035 E8(00000000)                call            _printf         ; printf(“%d   %d\n”, x, *xp);
+    35                                    
+    36 0000003A 5D                          pop	rbp                         ; restore stack
+    37                                      
+    38 0000003B B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    39 00000040 BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    40 00000045 0F05                        syscall                         ; quit
+    41                                  
+    42                                  
+    43                                   

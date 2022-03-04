@@ -1,0 +1,47 @@
+     1                                  ; 3.asm
+     2                                  
+     3                                  global _main
+     4                                  
+     5                                  extern _printf
+     6                                  
+     7                                  default rel
+     8                                  
+     9                                  section .data
+    10 00000000 253032642E25303264-     string      db      "%02d.%02d", 0xA, 0x0
+    10 00000009 0A00               
+    11 0000000B 00                      x           db      0
+    12 0000000C 00                      y           db      0
+    13 0000000D DC                      z           db      220
+    14                                  
+    15                                  section .text
+    16                                  _main:
+    17 00000000 55                          push    rbp                     ; save stack
+    18                                  
+    19 00000001 660FB605(0D000000)          movzx   ax, byte [z]
+    20 00000009 B70C                        mov     bh, 12
+    21 0000000B F6F7                        div     bh
+    22 0000000D 80FC00                      cmp     ah, 0
+    23 00000010 7504                        jne     a
+    24                                  
+    25 00000012 B40C                        mov ah, 12
+    26 00000014 FEC8                        dec al
+    27                                  
+    28                                      a: 
+    29 00000016 8825(0C000000)              mov byte [y], ah
+    30 0000001C 8805(0B000000)              mov byte [x], al
+    31                                  
+    32                                  
+    33                                  
+    34                                      
+    35 00000022 48BF-                       mov             rdi, string
+    35 00000024 [0000000000000000] 
+    36 0000002C 0FB635(0B000000)            movzx           esi, byte [x]
+    37 00000033 0FB615(0C000000)            movzx           edx, byte [y]
+    38 0000003A B800000000                  mov             rax, 0          ; no floating point
+    39 0000003F E8(00000000)                call            _printf
+    40                                    
+    41 00000044 5D                          pop	rbp                         ; restore stack
+    42                                      
+    43 00000045 B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    44 0000004A BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    45 0000004F 0F05                        syscall                         ; quit

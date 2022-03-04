@@ -1,0 +1,54 @@
+     1                                  ; 3.asm
+     2                                  
+     3                                  global _main
+     4                                  
+     5                                  extern _printf
+     6                                  extern _scanf
+     7                                  
+     8                                  default rel
+     9                                  
+    10                                  section .data
+    11 00000000 256400                  input_format    db      "%d", 0x0
+    12 00000003 5945530A00              yes             db      "YES", 0xA, 0x0
+    13 00000008 4E4F0A00                no              db      "NO", 0xA, 0x0
+    14 0000000C A05B                    x               dw      23456
+    15                                  
+    16                                  section .text
+    17                                  _main:
+    18 00000000 55                          push    rbp                     ; save stack
+    19                                  
+    20 00000001 48BF-                       mov     rdi, qword input_format
+    20 00000003 [0000000000000000] 
+    21 0000000B 48BE-                       mov     rsi, qword x
+    21 0000000D [0C00000000000000] 
+    22 00000015 E8(00000000)                call    _scanf
+    23                                  
+    24                                      
+    25 0000001A 668B05(0C000000)            mov     ax, [x]
+    26                                      to_cycle:
+    27 00000021 4831D2                      xor     rdx, rdx
+    28 00000024 66BB0A00                    mov     bx, 10
+    29 00000028 66F7F3                      div     bx
+    30 0000002B 6683FA05                    cmp     dx, 5
+    31 0000002F 7408                        je      to_yes
+    32 00000031 6683F800                    cmp     ax, 0
+    33 00000035 75EA                        jne     to_cycle
+    34                                  
+    35 00000037 EB0C                        jmp     to_no
+    36                                      to_yes:
+    37 00000039 48BF-                       mov     rdi, yes
+    37 0000003B [0300000000000000] 
+    38 00000043 EB0A                        jmp     to_print
+    39                                      to_no:
+    40 00000045 48BF-                       mov     rdi, no
+    40 00000047 [0800000000000000] 
+    41                                      
+    42                                      to_print:
+    43 0000004F B800000000                  mov             rax, 0          ; no floating point
+    44 00000054 E8(00000000)                call            _printf
+    45                                    
+    46 00000059 5D                          pop	rbp                         ; restore stack
+    47                                      
+    48 0000005A B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    49 0000005F BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    50 00000064 0F05                        syscall                         ; quit

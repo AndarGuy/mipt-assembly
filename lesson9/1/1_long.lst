@@ -1,0 +1,32 @@
+     1                                  ; 1.asm
+     2                                  
+     3                                  global _main
+     4                                  
+     5                                  extern _printf
+     6                                  
+     7                                  section .data
+     8 00000000 446F6E65210A00              string      db      "Done!", 0xA, 0x0
+     9                                  
+    10                                  section .text
+    11                                  _main:
+    12 00000000 55                          push    rbp                     ; save stack
+    13                                  
+    14 00000001 EB02                        jmp a
+    15                                  
+    16                                      c: 
+    17 00000003 EB02                        jmp b
+    18                                  
+    19                                      a: 
+    20 00000005 EBFC                        jmp c
+    21                                  
+    22                                      b: 
+    23 00000007 48BF-                       mov             rdi, string
+    23 00000009 [0000000000000000] 
+    24 00000011 B800000000                  mov             rax, 0          ; no floating point
+    25 00000016 E8(00000000)                call            _printf
+    26                                    
+    27 0000001B 5D                          pop	rbp                         ; restore stack
+    28                                      
+    29 0000001C B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    30 00000021 BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    31 00000026 0F05                        syscall                         ; quit

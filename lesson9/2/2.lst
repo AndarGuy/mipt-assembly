@@ -1,0 +1,46 @@
+     1                                  ; 2.asm
+     2                                  
+     3                                  global _main
+     4                                  
+     5                                  extern _printf
+     6                                  
+     7                                  default rel
+     8                                  
+     9                                  section .data
+    10 00000000 446F6E65210A00          string      db      "Done!", 0xA, 0x0
+    11                                  
+    12                                  section .bss
+    13 00000000 ????????????????        z           resq    1
+    14                                  
+    15                                  section .text
+    16                                  _main:
+    17 00000000 55                          push    rbp                     ; save stack
+    18                                      
+    19 00000001 48B8-                       mov rax, a
+    19 00000003 [2400000000000000] 
+    20 0000000B FFE0                        jmp rax
+    21                                  
+    22                                      c: 
+    23 0000000D 48B8-                       mov rax, b
+    23 0000000F [3E00000000000000] 
+    24 00000017 488905(00000000)            mov [z], rax
+    25 0000001E FF25(00000000)              jmp qword [z]
+    26                                  
+    27                                      a:
+    28 00000024 48B8-                       mov rax, c
+    28 00000026 [0D00000000000000] 
+    29 0000002E 488905(00000000)            mov [z], rax
+    30 00000035 488B1D(00000000)            mov rbx, [z]
+    31 0000003C FFE3                        jmp rbx
+    32                                  
+    33                                      b: 
+    34 0000003E 48BF-                       mov             rdi, string
+    34 00000040 [0000000000000000] 
+    35 00000048 B800000000                  mov             rax, 0          ; no floating point
+    36 0000004D E8(00000000)                call            _printf
+    37                                    
+    38 00000052 5D                          pop	rbp                         ; restore stack
+    39                                      
+    40 00000053 B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    41 00000058 BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    42 0000005D 0F05                        syscall                         ; quit

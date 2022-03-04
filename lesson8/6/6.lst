@@ -1,0 +1,61 @@
+     1                                  ; Напишите программу для вычисления формулы d=b-1+a-c. 
+     2                                  ; Все числа 3-х байтные целые без знака
+     3                                  
+     4                                  global _main
+     5                                  
+     6                                  default rel
+     7                                  
+     8                                  extern _printf
+     9                                  
+    10                                  section .data
+    11 00000000 64203D2025750A00        output_format   db      "d = %u", 0xA, 0x0
+    12 00000008 00008000                a               dd    8388608
+    13 0000000C C76B7300                b               dd    7564231
+    14 00000010 09000000                c               dd    9
+    15 00000014 00000000                d               dd    0
+    16                                  
+    17                                  
+    18                                  section .text
+    19                                  
+    20                                  _main:
+    21 00000000 55                          push    rbp                     ; save stack
+    22                                  
+    23 00000001 668B05(0C000000)            mov             ax, [b]
+    24 00000008 8A1D(0E000000)              mov             bl, [b + 2]
+    25 0000000E 66FFC8                      dec             ax
+    26 00000011 80DB00                      sbb             bl, 0
+    27                                  
+    28 00000014 668B0D(08000000)            mov             cx, [a]
+    29 0000001B 8A3D(0A000000)              mov             bh, [a + 2]
+    30 00000021 6601C8                      add             ax, cx
+    31 00000024 10FB                        adc             bl, bh
+    32                                  
+    33 00000026 668B0D(10000000)            mov             cx, [c]
+    34 0000002D 8A3D(12000000)              mov             bh, [c + 2]
+    35 00000033 6629C8                      sub             ax, cx
+    36 00000036 18FB                        sbb             bl, bh
+    37                                  
+    38 00000038 668905(14000000)            mov             [d], ax
+    39 0000003F 881D(16000000)              mov             [d + 2], bl
+    40                                  
+    41                                      ; mov ax, [d]
+    42                                      ; dec ax
+    43                                      ; mov [d], ax
+    44                                  
+    45                                  
+    46                                  
+    47                                      ; print
+    48 00000045 48BF-                       mov             rdi, output_format
+    48 00000047 [0000000000000000] 
+    49 0000004F 8B35(14000000)              mov             esi, dword [d]
+    50 00000055 B800000000                  mov             rax, 0          ; no floating point
+    51 0000005A E8(00000000)                call            _printf         ; printf(“%d   %d\n”, x, *xp);
+    52                                    
+    53 0000005F 5D                          pop	rbp                         ; restore stack
+    54                                      
+    55 00000060 B801000002                  mov       rax, 0x2000000 + 0x1  ; 1 = exit
+    56 00000065 BF00000000                  mov       rdi, 0                ; 0 = success exit code
+    57 0000006A 0F05                        syscall                         ; quit
+    58                                  
+    59                                  
+    60                                   

@@ -7,23 +7,46 @@ default rel
 
 extern _printf
 
-output_format   db      "z = %d", 0xA, 0x0
+section .data
+output_format   db      "d = %u", 0xA, 0x0
+a               dd    8388608
+b               dd    7564231
+c               dd    9
+d               dd    0
 
-section .bss
-a               resb    3
-b               resb    3
-c               resb    3
-d               resb    3
 
 section .text
 
 _main:
     push    rbp                     ; save stack
 
+    mov             ax, [b]
+    mov             bl, [b + 2]
+    dec             ax
+    sbb             bl, 0
+
+    mov             cx, [a]
+    mov             bh, [a + 2]
+    add             ax, cx
+    adc             bl, bh
+
+    mov             cx, [c]
+    mov             bh, [c + 2]
+    sub             ax, cx
+    sbb             bl, bh
+
+    mov             [d], ax
+    mov             [d + 2], bl
+
+    ; mov ax, [d]
+    ; dec ax
+    ; mov [d], ax
+
+
 
     ; print
     mov             rdi, output_format
-    movsx           esi, word [z]
+    mov             esi, dword [d]
     mov             rax, 0          ; no floating point
     call            _printf         ; printf(“%d   %d\n”, x, *xp);
   
